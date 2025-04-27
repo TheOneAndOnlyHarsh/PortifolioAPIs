@@ -5,15 +5,19 @@ using WebApplication1.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var connectionString = Environment.GetEnvironmentVariable("RAILWAY_DATABASE_URL")
+                      ?? builder.Configuration.GetConnectionString("DefaultConnection");
 // Add services to the container.
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<AppDbContext>(db => db.UseSqlServer(
+/*builder.Services.AddDbContext<AppDbContext>(db => db.UseSqlServer(
     builder.Configuration.GetConnectionString("DefaultConnection"))
-);
+);*/
+
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -48,3 +52,9 @@ app.Run();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 app.MapControllers();
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+app.UseRouting();
+app.UseAuthorization();
+app.MapControllers();
+
